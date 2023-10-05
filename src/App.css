@@ -1,0 +1,16 @@
+.circle{
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  background: white;
+  position: relative;
+}
+
+.line{
+  position: absolute;
+  height: 2.5em;
+  width: 4px;
+  background-color: white;
+  left: 44%;
+  top: 100%;
+}
