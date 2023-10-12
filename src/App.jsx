@@ -21,6 +21,8 @@ function App() {
   const [message, setMessage] = useState(null);
   const [messageColor, setMessageColor] = useState(null);
 
+  const [open, setOpen] = useState(false)
+
   const handleChange = (e) => {
     setForm((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -40,6 +42,7 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setOpen(true)
         // Set the prediction as an integer
         setPrediction(data.prediction);
   
@@ -101,7 +104,51 @@ function App() {
   }, [probability]);
 
   return (
-    <div className="main px-32 py-16 h-screen w-screen bg-gray-300">
+    <div className="">
+      <div className={open? "modal absolute  h-screen w-screen flex justify-center items-center":"modal nope h-screen w-screen flex justify-center items-center"}>
+       <div className="p-10 w-1/2 bg-white">
+        <div className="close cursor-pointer" onClick={()=>{
+          setOpen(false)
+        }}>x</div>
+        {prediction !== null && (
+            <div className="mt-4 text-xl">
+              <h2>
+                Prediction: {prediction === 1 ? "Diabetes" : "No Diabetes"}
+              </h2>
+              {message && (
+                <p style={{ color: messageColor }}>{message}</p>
+              )}
+            </div>
+          )}
+
+        {pieChartData && (
+                    <div className="mt-4">
+                      <PieChart width={400} height={400}>
+                        <Pie
+                          data={pieChartData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={100}
+                          fill="#8884d8"
+                          label
+                        >
+                          {pieChartData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={index === 0 ? "#FF6384" : "#36A2EB"}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </div>
+        )}
+       </div>
+      </div>
+    <div className="main px-32 py-16 h-screen bg-gray-300">
+      
       <div className="container w-full h-full grid grid-cols-5 shadow-slate-600 shadow-sm">
         <div className="description p-8 col-span-2 bg-green-400 text-white">
           <h1 className="font-bold text-4xl">
@@ -229,7 +276,7 @@ function App() {
                 type="text"
                 name="pedigree"
                 className="block rounded-md border-0 py-1.5 pl-7  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="94"
+                placeholder="2.67"
               />
             </div>
             <div className="">
@@ -251,46 +298,16 @@ function App() {
               </button>
             </div>
           </form>
-              {/* Display prediction and message */}
-              {prediction !== null && (
-            <div className="mt-4">
-              <h2>
-                Prediction: {prediction === 1 ? "Diabetes" : "No Diabetes"}
-              </h2>
-              {message && (
-                <p style={{ color: messageColor }}>{message}</p>
-              )}
-            </div>
-          )}
+          
+          {/* Display prediction and message */}
+          
           {/* Display pie chart */}
-          {pieChartData && (
-            <div className="mt-4">
-              <PieChart width={400} height={400}>
-                <Pie
-                  data={pieChartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
-                  label
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={index === 0 ? "#FF6384" : "#36A2EB"}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </div>
-          )}
+          
       
         </div>
       </div>
       
+    </div>
     </div>
   );
   }
@@ -301,34 +318,3 @@ export default App;
 
 
 
-const art = `$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$**$$$$$$$$$**$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$"   ^$$$$$$F    *$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$     z$$$$$$L    ^$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$    e$$$$$$$$$e  J$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$eee$$$$$$$$$$$$$e$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$b$$$$$$$$$$$$$$$$$$*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$)$$$$P"e^$$$F$r*$$$$F"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$d$$$$  "z$$$$"  $$$$%  $3$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$*"""*$$$  .$$$$$$ z$$$*   ^$e*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$"     *$$ee$$$$$$$$$$*"     $$$C$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$.      "***$$"*"$$""        $$$$e*$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$b          "$b.$$"          $$$$$b"$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$c.         """            $$$$$$$^$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$e..                     $$$$$$$$^$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$eeee..            J$$$$$$$$b"$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$r          z$$$$$$$$$$r$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"         z$$$$$**$$$$$^$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$*"          z$$$P"   ^*$$$ $$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$*"           .d$$$$       $$$ $$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$"           .e$$$$$F       3$$ $$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$.         .d$$$$$$$         $PJ$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$eeeeeeed$*""""**""         $$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$                  $d$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$.                 $$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$e.              d$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$eeeeeee$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Gilo94'$$$$
-`;

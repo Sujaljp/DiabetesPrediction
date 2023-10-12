@@ -45,28 +45,10 @@ def predict():
 
         print(feature_values)
 
-        # input_data = np.array(feature_values).reshape(1, -1)
-        # print(input_data)
-        # Use the XGBoost model to make predictions
-        # prediction_prob = model.predict(xgb.DMatrix(input_data))
-        # prediction = int(prediction_prob[0])
-        # Prepare input data for prediction
-        # input_data = np.array([pregnancies, glucose, blood, skin, insulin, bmi, 0.0, 0.0, 0.0, 0.0])
-        # input_data = input_data.reshape(1, -1)  # Reshape to a 2D array
-
-        # # Use the XGBoost model to make predictions
-        # prediction_prob = model.predict(xgb.DMatrix(input_data))
-        # prediction = 1 if prediction_prob > 0.5 else 0  # Assuming binary classification
-
         prediction = model.predict([feature_values])
         print(prediction)
 
         prediction = int(prediction[0])
-
-#         X_train_probabilities = model.predict_proba([feature_values])
-
-        # # Assuming it's a binary classification task, you can extract the probability for the positive class (class 1)
-#         class_probabilities = X_train_probabilities
 
         class_probabilities = model.predict_proba([feature_values])[0]
         print(class_probabilities)

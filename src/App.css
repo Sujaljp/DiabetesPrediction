@@ -4,6 +4,7 @@
   height: 30px;
   background: white;
   position: relative;
+
 }
 
 .line{
@@ -13,4 +14,15 @@
   background-color: white;
   left: 44%;
   top: 100%;
+}
+
+.modal{
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.67);
+}
+
+.nope{
+  display: none;
+  position: absolute;
+  top: -100%;
 }
